@@ -8,7 +8,7 @@ import socket # importing library
 import threading
 serverPort = 11000 # declaring open port for the server
 
-users = []
+clients = []
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('',serverPort)) #Server is binded to the ip adresss and port 11000
@@ -28,14 +28,11 @@ def getInfo():
 	while 1:
 		user, addr = server.accept()
 		print ('Waiting for chatsss')
-		user.send('Enter name:'.encode('ascii'))
 		name = user.recv(1024).decode('ascii')
-		
-		names.append(name)
-
-		msgToClients('{name} is now chattin. Give em a nice welcome!'.encode('ascii'))
-
-		thread = threading.Thread(target=updateServerWithMessage, args=(client,))
+		print(name)
+		msgToClients('Name is now chattin. Give em a nice welcome!'.encode('ascii'))
+		user.send('Enter a msg:'.encode('ascii'))
+		thread = threading.Thread(target=updateServerWithMessage, args=(user,))
 		thread.start()
 
 getInfo()
